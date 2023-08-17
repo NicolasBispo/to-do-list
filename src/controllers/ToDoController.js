@@ -50,8 +50,18 @@ class ToDoController{
         let inputText = item.querySelector('.item-to-do');
         inputText.addEventListener('keypress', e=>{
             if(e.key === 'Enter' && inputText.value != ""){
+                let strInputText = inputText.id
+                console.log('strinputtext', strInputText)       
+                let idInputText = strInputText.charAt(strInputText.length -1)
+
+                console.log('items.length', this.items.length)
+                console.log('idinputtext', idInputText)
+                if(this.items.length == parseInt(idInputText) + 1){
+                    
+                    this.addToDoItemLine()
+                    
+                }                
                 
-                this.addToDoItemLine()
             }
         })
         inputText.addEventListener('keydown', e=>{
@@ -62,9 +72,11 @@ class ToDoController{
             }
         })
         inputText.addEventListener('focus', e=>{
+            console.log('elemento focus')
             this._currentInputActive = inputText.id
         })
         inputText.addEventListener('click', e=>{
+            console.log('elemento click');
             this._currentInputActive = inputText.id
         })
         
@@ -75,27 +87,9 @@ class ToDoController{
     }
     initEvents(){
         [...this.items].forEach((item)=>{
-            
-            let inputText = item.querySelector('.item-to-do');
-            
-            inputText.addEventListener('keypress', e=>{
-                if(e.key === 'Enter' && inputText.value != ""){
-                    this.addToDoItemLine()
-                }
-            })
-            inputText.addEventListener('keydown', e=>{
-                if(e.key == 'Backspace'){
-                    if(inputText.value == "" || inputText.value == undefined){
-                        removeCurrentLine();
-                    }
-                }
-            })
-            inputText.addEventListener('focus', e=>{
-                this._currentInputActive = inputText.id
-            })
-            inputText.addEventListener('click', e=>{
-                this._currentInputActive = inputText.id
-            })
+                        
+            this.addEventsToItems(item);
+
         })
     }
 
