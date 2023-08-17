@@ -1,0 +1,1 @@
+window.toDoController = new ToDoController('form-to-do');
