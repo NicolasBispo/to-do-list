@@ -48,6 +48,7 @@ body{
     height: 4vh;
     grid-template-columns: 10% 89%;
     column-gap: 1%;
+    margin-bottom: 1rem;
 }
 .items input{
     height: 100%;
