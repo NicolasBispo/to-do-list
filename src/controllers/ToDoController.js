@@ -1,8 +1,12 @@
 class ToDoController{
 
-    constructor(form){
 
-        this.formItems = document.getElementById(form);
+    /**
+    @param {string} formId form which contains the items from to-do
+    */
+    constructor(formId){
+
+        this.formItems = document.getElementById(formId);
         this.items = document.querySelectorAll('.items');
         this._currentInputActive;
 
@@ -11,12 +15,16 @@ class ToDoController{
         this.initEvents();
     }
 
+
+    /**
+    *Adds id to items in div "items"
+    */
     setIdToItems(){
-    //Set an id to each item in the form                         
+    
         this.items.forEach((element,index) =>{
-            let elementName = element.className
-            
-            element.id = elementName+index
+
+            if(element.classList.contains('items')) element.id = 'items'+index
+                
             element.querySelector('.item-complete-status').id = `item-complete-status${index}`;
             element.querySelector('.item-to-do').id = 'item-to-do'+index
         })
@@ -29,8 +37,11 @@ class ToDoController{
             <input class='item-complete-status' type="checkbox">
             <input class='item-to-do' type="text">                       
             `
+
         itemAdd.classList.add('items');
-        this.formItems.appendChild(itemAdd);
+        itemAdd.classList.add('slide-bottom')
+        this.formItems.appendChild(itemAdd);        
+        
         let inputToDo = itemAdd.querySelector('.item-to-do')
         inputToDo.focus()
         inputToDo.click();
@@ -43,43 +54,85 @@ class ToDoController{
         
         this._currentInputActive = inputToDo.id
         
+        }
+
+    getInputTodoId(idInputFull){
+        //returns last char from input to get id number
+        return idInputFull.id.charAt(idInputFull.id.length -1);
+    }
+    removeCurrentLine(itemLine){
+        if(this.items.length > 1){
+
+        itemLine.classList.add('slide-top')
+        setTimeout(() => {
+            let inputToDo = itemLine.querySelector('.item-to-do');
         
+            this._currentInputActive = inputToDo.id;
+
+            let idInputToDo = this.getInputTodoId(inputToDo);
+            let upperItem = 'items'+(parseInt(idInputToDo)-1)
+
+            if(idInputToDo == 0 || idInputToDo < 0){            
+                upperItem = 'items0';
+            }
+            upperItem = document.getElementById(upperItem);
+            inputToDo = upperItem.querySelector('.item-to-do');
+            inputToDo.focus()
+            
+            
+
+            itemLine.remove();
+            this.updateItemList();
+            this.setIdToItems();
+        }, 500);
+        
+        }
+                
     }
 
     addEventsToItems(item){
+
+
         let inputText = item.querySelector('.item-to-do');
         inputText.addEventListener('keypress', e=>{
             if(e.key === 'Enter' && inputText.value != ""){
-                let strInputText = inputText.id
-                console.log('strinputtext', strInputText)       
-                let idInputText = strInputText.charAt(strInputText.length -1)
-
-                console.log('items.length', this.items.length)
-                console.log('idinputtext', idInputText)
+                                
+                let idInputText = this.getInputTodoId(inputText)
+                
                 if(this.items.length == parseInt(idInputText) + 1){
                     
                     this.addToDoItemLine()
                     
-                }                
-                
+                }                                
             }
         })
         inputText.addEventListener('keydown', e=>{
             if(e.key == 'Backspace'){
                 if(inputText.value == "" || inputText.value == undefined){
-                    removeCurrentLine();
+                    this.removeCurrentLine(item);
                 }
             }
         })
         inputText.addEventListener('focus', e=>{
-            console.log('elemento focus')
             this._currentInputActive = inputText.id
         })
         inputText.addEventListener('click', e=>{
-            console.log('elemento click');
             this._currentInputActive = inputText.id
         })
         
+
+        let inputCheck = item.querySelector('.item-complete-status');
+        inputCheck.addEventListener('click', e=>{
+            console.log('CHECKED VALUE:', inputCheck.checked)
+            if(inputCheck.checked){
+                console.log('TRUE KKKKK');
+                inputText.disabled = true;
+            }
+            else if(!inputCheck.check){
+                console.log('FALSEKKKKKKK')
+                inputText.disabled = false;
+            }
+        })
     }
 
     updateItemList(){
@@ -91,6 +144,8 @@ class ToDoController{
             this.addEventsToItems(item);
 
         })
+
+
     }
 
     get currentInputActive(){
