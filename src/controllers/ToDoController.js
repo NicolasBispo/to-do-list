@@ -139,6 +139,10 @@ class ToDoController{
         this.items = document.querySelectorAll('.items');
     }
     initEvents(){
+        this.formItems.addEventListener('submit', e=>{
+            e.preventDefault();
+        });
+        
         [...this.items].forEach((item)=>{
                         
             this.addEventsToItems(item);
