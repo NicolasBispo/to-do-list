@@ -95,6 +95,7 @@ class ToDoController{
 
         let inputText = item.querySelector('.item-to-do');
         inputText.addEventListener('keypress', e=>{
+            e.preventDefault();
             if(e.key === 'Enter' && inputText.value != ""){
                                 
                 let idInputText = this.getInputTodoId(inputText)
@@ -107,6 +108,7 @@ class ToDoController{
             }
         })
         inputText.addEventListener('keydown', e=>{
+            e.preventDefault();
             if(e.key == 'Backspace'){
                 if(inputText.value == "" || inputText.value == undefined){
                     this.removeCurrentLine(item);
@@ -114,15 +116,18 @@ class ToDoController{
             }
         })
         inputText.addEventListener('focus', e=>{
+            e.preventDefault();
             this._currentInputActive = inputText.id
         })
         inputText.addEventListener('click', e=>{
+            e.preventDefault();
             this._currentInputActive = inputText.id
         })
         
 
         let inputCheck = item.querySelector('.item-complete-status');
         inputCheck.addEventListener('click', e=>{
+            e.preventDefault();
             console.log('CHECKED VALUE:', inputCheck.checked)
             if(inputCheck.checked){
                 console.log('TRUE KKKKK');
@@ -142,7 +147,7 @@ class ToDoController{
         this.formItems.addEventListener('submit', e=>{
             e.preventDefault();
         });
-        
+
         [...this.items].forEach((item)=>{
                         
             this.addEventsToItems(item);
